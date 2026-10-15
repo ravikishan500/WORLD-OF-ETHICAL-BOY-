@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STUDY PLATFORM BY ETHICAL BOY</title>
+    <style>
+        /* 1. Global Styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #0d0b19;
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        /* 2. Fullscreen Key System Overlay */
+        .app-key-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(10, 10, 20, 0.98);
+            z-index: 99999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .app-key-box {
+            background: #1a1a2e;
+            padding: 25px;
+            border-radius: 15px;
+            border: 2px solid #e94560;
+            width: 90%;
+            max-width: 440px;
+            box-shadow: 0 0 30px rgba(233, 69, 96, 0.6);
+            box-sizing: border-box;
+        }
+        .app-key-box h3 {
+            color: #e94560;
+            font-size: 24px;
+            margin-top: 0;
+            letter-spacing: 1px;
+        }
+        .info-msg-box {
+            background: rgba(233, 69, 96, 0.1);
+            border: 1px dashed #e94560;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+        .app-key-input {
+            width: 100%;
+            padding: 14px;
+            background: #161623;
+            border: 1px solid #444;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 16px;
+            margin-bottom: 18px;
+            box-sizing: border-box;
+            outline: none;
+        }
+        .verify-btn {
+            background: linear-gradient(90deg, #07bfff, #30d2ff);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 14px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .verify-btn:active { transform: scale(0.98); }
+        .telegram-redirect-btn {
+            background: #0088cc;
+            color: white;
+            border: none;
+            padding: 12px;
+            font-size: 15px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 15px;
+            text-decoration: none;
+            display: inline-block;
+            box-sizing: border-box;
+        }
+
+        /* 3. Telegram Popup Overlay */
+        .simple-popup-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0, 0, 0, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+        .simple-popup-box {
+            background: #0b1426;
+            border: 2px solid #00a2ff;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 350px;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .simple-main-desc { font-size: 14px; line-height: 1.5; margin-bottom: 15px; }
+        .simple-important-box {
+            border: 1.5px dashed #00a2ff;
+            padding: 10px;
+            margin-bottom: 15px;
+            text-align: left;
+            font-size: 13px;
+            color: #a4a5b8;
+        }
+        .simple-join-btn {
+            display: block;
+            background: #00a2ff;
+            color: white;
+            padding: 12px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .simple-continue-btn {
+            display: block;
+            width: 100%;
+            background: transparent;
+            color: #94a5b8;
+            padding: 10px;
+            border: 1px solid #94a5b8;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        /* 4. Welcome Screen */
+        .simple-welcome-screen {
+            padding: 50px 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            box-sizing: border-box;
+        }
+        .simple-welcome-title { font-size: 26px; font-weight: bold; margin-bottom: 30px; }
+        .simple-start-btn {
+            background: #ec4899;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(236, 72, 153, 0.4);
+        }
+
+        /* 5. iFrame Container */
+        .simple-iframe-container {
+            display: none;
+            width: 100vw;
+            height: 100vh;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- STAGE 1: SECURE KEY VERIFICATION OVERLAY -->
+    <div id="fullAppKeyOverlay" class="app-key-overlay">
+        <div class="app-key-box">
+            <h3>ENTER APP KEY</h3>
+            <div class="info-msg-box">
+                Code aapko telegram channel me mil jayega kripya hamare telegram channel se jud jaiye 🙏🏻🔥
+            </div>
+            <input type="text" id="userAppKeyInput" class="app-key-input" placeholder="Yahan Key Paste Karein..." autocomplete="off">
+            <button class="verify-btn" onclick="checkUserAppKey()">Verify Key</button>
+            <a href="https://t.me/mod_by_ethicalboy_45" target="_blank" class="telegram-redirect-btn">🚀 Join Telegram Channel</a>
+        </div>
+    </div>
+
+    <!-- STAGE 2: TELEGRAM POPUP (KEY PASS HONE KE BAAD DIKHEGA) -->
+    <div id="simpleTelegramPopup" class="simple-popup-overlay" style="display: none;">
+        <div class="simple-popup-box">
+            <h3 style="margin-top:0;">WELCOME TO HACK</h3>
+            <h2 style="color:#00a2ff; margin-bottom:5px;">MOD BY ETHICAL BOY</h2>
+            <p>✓</p>
+            <div class="simple-main-desc">
+                हेलो दोस्तों, WELCOME TO OUR APP <br>
+                इस ऐप के अंदर आप सभी को सभी Study Platform को एक्सेस करने की राह आसान की गई है।
+            </div>
+            <div class="simple-important-box">
+                <strong style="color:#00a2ff;">IMPORTANT:</strong><br>
+                कृपया ऐप के बारे में सभी जानकारी और इसके नए अपडेट जानने के लिए हमारे टेलीग्राम चैनल को जरूर ज्वाइन करें। ❤️🔥
+            </div>
+            <a href="https://t.me/mod_by_ethicalboy_45" target="_blank" class="simple-join-btn" onclick="closeSimplePopup()">👉 JOIN NOW 👈</a>
+            <button class="simple-continue-btn" onclick="closeSimplePopup()">Continue to app</button>
+        </div>
+    </div>
+
+    <!-- STAGE 3: WELCOME SCREEN -->
+    <div id="simpleWelcomeScreen" class="simple-welcome-screen" style="display: none;">
+        <div class="simple-welcome-title">WELCOME TO WORLD OF ETHICAL BOY 🧑‍💻</div>
+        <button class="simple-start-btn" onclick="startSimpleApp()">Start Now</button>
+    </div>
+
+    <!-- STAGE 4: MAIN IFRAME (WEBSITE) -->
+    <div id="simpleIframeContainer" class="simple-iframe-container">
+        <iframe id="myAppIframe" src="https://pw.lrnt.ccwu.cc"></iframe>
+    </div>
+
+    <script>
+        // 🔑 1. APNI CHOSEN STATIC KEY YAHAN RAKHEIN
+        const MY_STATIC_KEY = "RTXCHIN-4518";
+
+        // App Load hote hi sabse pehle status check karein
+        window.addEventListener('DOMContentLoaded', checkSavedKeyStatus);
+
+        function checkSavedKeyStatus() {
+            const savedTime = localStorage.getItem("app_key_success_time");
+            const currentTime = new Date().getTime();
+            const keyOverlay = document.getElementById("fullAppKeyOverlay");
+            const telegramPopup = document.getElementById("simpleTelegramPopup");
+
+            if (savedTime && (currentTime - savedTime < 86400000)) {
+                keyOverlay.style.display = "none";
+                telegramPopup.style.display = "flex";
+            } else {
+                keyOverlay.style.display = "flex";
+                localStorage.removeItem("app_key_success_time");
+            }
+        }
+
+        // Key verification handle karne ka main function
+        function checkUserAppKey() {
+            const userInput = document.getElementById("userAppKeyInput").value.trim();
+            const keyOverlay = document.getElementById("fullAppKeyOverlay");
+            const telegramPopup = document.getElementById("simpleTelegramPopup");
+
+            if (userInput === MY_STATIC_KEY) {
+                localStorage.setItem("app_key_success_time", new Date().getTime());
+                keyOverlay.style.display = "none";
+                telegramPopup.style.display = "flex";
+                alert("Key Successful! Welcome.");
+            } else {
+                alert("❌ Galat Key! Kripya sahi key enter karein.");
+            }
+        }
+
+        // Telegram popup band karke Welcome screen dikhane ke liye
+        function closeSimplePopup() {
+            document.getElementById("simpleTelegramPopup").style.display = 'none';
+            document.getElementById("simpleWelcomeScreen").style.display = 'flex';
+        }
+
+        // Start Now click hone par iFrame load karne ke liye
+        function startSimpleApp() {
+            document.getElementById("simpleWelcomeScreen").style.display = 'none';
+            document.getElementById("simpleIframeContainer").style.display = 'block';
+        }
+    </script>
+</body>
+</html>
+<!-- ==========================================
+     NAYE BUTTONS AUTOMATICALLY ADD KARNE KA CODE
+     (Ise apne code ke sabse neeche paste karein)
+     ========================================== -->
+<style>
+    /* Naye buttons ka look aur style design karne ke liye CSS */
+    .injected-action-btn {
+        display: block !important;
+        width: 100% !important;
+        padding: 12px !important;
+        font-size: 15px !important;
+        font-weight: bold !important;
+        color: white !important;
+        text-decoration: none !important;
+        border-radius: 8px !important;
+        box-sizing: border-box !important;
+        margin-bottom: 12px !important;
+        text-align: center !important;
+        cursor: pointer !important;
+        transition: 0.2s !important;
+    }
+    .injected-action-btn:active { 
+        transform: scale(0.98) !important; 
+    }
+    .inj-gen-btn {
+        background: linear-gradient(90deg, #f59e0b, #d97706) !important; /* Orange Gradient */
+    }
+    .inj-free-btn {
+        background: linear-gradient(90deg, #10b981, #059669) !important; /* Green Gradient */
+    }
+    /* Purane Verify button ke niche thoda gap dene ke liye */
+    #fullAppKeyOverlay button.verify-btn {
+        margin-bottom: 12px !important;
+    }
+</style>
+
+<script>
+    // Jaise hi page load hoga, yeh script dono naye buttons ko unki sahi jagah par daal degi
+    document.addEventListener("DOMContentLoaded", function() {
+        // 1. Purane Verify Button ko dhoondhna
+        const verifyBtn = document.querySelector("#fullAppKeyOverlay button.verify-btn") || document.querySelector("button[onclick*='checkUserAppKey']");
+        
+        if (verifyBtn) {
+            // 2. Pehla Naya Button banana (HOW TO GENERATE KEY)
+            const genBtn = document.createElement("a");
+            genBtn.href = "https://t.me/mod_by_ethicalboy_45/447"; // 📝 YAHAN APNA LINK DAALEIN
+            genBtn.target = "_blank";
+            genBtn.className = "injected-action-btn inj-gen-btn";
+            genBtn.innerHTML = "HOW TO GENERATE KEY 🗝️";
+
+            // 3. Doosra Naya Button banana (GET 24 HOURS FREE ACCESS)
+            const freeBtn = document.createElement("a");
+            freeBtn.href = "https://arolinks.com/y8pmNX"; // 📝 YAHAN APNA LINK DAALEIN
+            freeBtn.target = "_blank";
+            freeBtn.className = "injected-action-btn inj-free-btn";
+            freeBtn.innerHTML = "GET 24 HOURS FREE ACCESS ✅";
+
+            // 4. Dono buttons ko Verify Key ke theek niche insert karna
+            verifyBtn.parentNode.insertBefore(freeBtn, verifyBtn.nextSibling);
+            verifyBtn.parentNode.insertBefore(genBtn, verifyBtn.nextSibling);
+        }
+    });
+</script>
+<!-- ==========================================
+     AUTOMATIC INJECTION CODE ENDS HERE
+     ========================================== -->
+<!-- ==========================================
+     ACCESS REMAINING TIMER SYSTEM CODE
+     (Ise apne code ke sabse neeche paste karein)
+     ========================================== -->
+<style>
+    /* Timer Widget ka Style aur Look */
+    .access-timer-banner {
+        position: fixed !important;
+        top: 10px !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        background: linear-gradient(135deg, #1e1b4b, #311042) !important;
+        color: #00ffcc !important; /* Neon Green/Cyan look */
+        padding: 8px 16px !important;
+        border-radius: 20px !important;
+        font-family: Arial, sans-serif !important;
+        font-size: 14px !important;
+        font-weight: bold !important;
+        border: 1px solid #00ffcc !important;
+        box-shadow: 0 0 15px rgba(0, 255, 204, 0.4) !important;
+        z-index: 9999 !important; /* Sabse upar rahega */
+        display: none; /* By default chhipa rahega, sahi key par hi dikhega */
+        letter-spacing: 0.5px !important;
+        pointer-events: none !important; /* Iframe ke touch me rukawat nahi banega */
+    }
+</style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // 1. Ek naya div element banana timer ke liye
+        const timerBanner = document.createElement("div");
+        timerBanner.id = "appAccessTimer";
+        timerBanner.className = "access-timer-banner";
+        document.body.appendChild(timerBanner);
+
+        // 2. Har ek second me time calculate karne ka function
+        function updateRemainingTime() {
+            const savedTime = localStorage.getItem("app_key_success_time");
+            const keyOverlay = document.getElementById("fullAppKeyOverlay");
+            
+            // Check karein ki key overlay hidden hai ya nahi (Yani user logged in hai)
+            const isVisible = keyOverlay && (keyOverlay.style.display === "none" || keyOverlay.style.getPropertyValue("display") === "none");
+
+            if (savedTime && isVisible) {
+                const currentTime = new Date().getTime();
+                const totalAccessTime = 86400000; // 24 Ghante milliseconds me
+                const timePassed = currentTime - savedTime;
+                const timeLeft = totalAccessTime - timePassed;
+
+                if (timeLeft > 0) {
+                    // Milliseconds ko Hours, Minutes aur Seconds me badalna
+                    const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+                    const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+                    // Timer text ko screen par update karna
+                    timerBanner.innerText = `⏳ Remaining Access: ${hours}h ${minutes}m ${seconds}s`;
+                    timerBanner.style.display = "block"; // Timer dikhayein
+                } else {
+                    // Agar 24 ghante poore ho gaye toh banner chhupao
+                    timerBanner.style.display = "none";
+                }
+            } else {
+                // Agar key screen samne hai toh timer mat dikhao
+                timerBanner.style.display = "none";
+            }
+        }
+
+        // Har 1 second (1000ms) me timer ko update karte rehna
+        setInterval(updateRemainingTime, 1000);
+        
+        // Page kholte hi turant pehli baar run karne ke liye
+        updateRemainingTime();
+    });
+</script>
+<!-- ==========================================
+     ACCESS REMAINING TIMER SYSTEM ENDS HERE
+     ========================================== -->
+<!-- SMOOTH COPIED ANIMATION SYSTEM (NO EDITING REQUIRED) -->
+<script>
+    (function() {
+        // 1. Ek sundar aur modern Custom Animation Box banana
+        const toast = document.createElement("div");
+        toast.innerHTML = "Copied to Clipboard! 📋";
+        
+        // CSS Style design jo bina kisi purane code ko chhede kaam karega
+        Object.assign(toast.style, {
+            position: "fixed",
+            bottom: "-60px", // Shuruat me screen ke niche chhipa rahega
+            left: "50%",
+            transform: "translateX(-50%)",
+            background: "linear-gradient(135deg, #1e1b4b, #311042)",
+            color: "#00ffcc", // Neon look
+            padding: "12px 24px",
+            borderRadius: "30px",
+            fontFamily: "Arial, sans-serif",
+            fontSize: "14px",
+            fontWeight: "bold",
+            border: "1px solid #00ffcc",
+            boxShadow: "0 0 15px rgba(0, 255, 204, 0.4)",
+            zIndex: "999999",
+            transition: "all 0.4s ease", // Smooth up and down animation
+            pointerEvents: "none"
+        });
+        document.body.appendChild(toast);
+
+        // Animation ko screen par laane aur le jaane ka function
+        function showAnimatedToast() {
+            toast.style.bottom = "40px"; // Upar aane ka animation
+            setTimeout(function() {
+                toast.style.bottom = "-60px"; // Wapas niche jaakar chhupne ka animation
+            }, 3000); // 2 second tak screen par rukega
+        }
+
+        // 2. Buttons ko trace karke automatic copy feature jorna
+        const attachCopy = setInterval(function() {
+            const buttons = document.querySelectorAll("#fullAppKeyOverlay button, #fullAppKeyOverlay a");
+            
+            if (buttons.length >= 4) {
+                clearInterval(attachCopy); // Buttons milne par loop band karein
+
+                buttons.forEach(function(btn) {
+                    btn.addEventListener("click", function() {
+                        let textToCopy = btn.href ? btn.href : "";
+                        
+                        if (!btn.href) {
+                            const inputField = document.getElementById("userAppKeyInput");
+                            if (inputField) textToCopy = inputField.value.trim();
+                        }
+
+                        if (textToCopy !== "") {
+                            // Background me chupchap copy karne ka system
+                            const el = document.createElement('textarea');
+                            el.value = textToCopy;
+                            document.body.appendChild(el);
+                            el.select();
+                            document.execCommand('copy');
+                            document.body.removeChild(el);
+                            
+                            // Alert ki jagah custom animation trigger karna
+                            showAnimatedToast();
+                        }
+                    });
+                });
+            }
+        }, 500);
+    })();
+</script>
